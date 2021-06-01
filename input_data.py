@@ -30,7 +30,7 @@ lop = input("Nhap Lop: ")
 email = input("Email: ")
 InsertOrUpdate(mssv, name, lop, email)
 
-video = cv2.VideoCapture(2)
+video = cv2.VideoCapture(0)
 smlNum = 0
 while True:
     ret, frame = video.read()

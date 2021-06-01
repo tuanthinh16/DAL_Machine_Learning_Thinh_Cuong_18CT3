@@ -3,7 +3,6 @@ import os.path
 import numpy as np
 from PIL import Image
 import easygui
-import cognitive_face as CF
 
 facecascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 recongniger = cv2.face.EigenFaceRecognizer_create()
