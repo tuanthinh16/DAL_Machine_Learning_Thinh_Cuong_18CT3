@@ -1,0 +1,6 @@
+opencv-contrib-python
+numpy
+Pillow
+pysqlite3
+sqlite
+easygui
