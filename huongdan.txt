@@ -1,0 +1,4 @@
+b1. tiến hành cài đặt các library trong file requestment.txt
+b2. Chạy dile input_data.py để thực hiện nhập dữ liệu và lấy dữ liệu khuôn mặt
+b3. Chạy file train.py để tiến hành trainning model và lưu file dưới dạng .xml
+b4. Chạy file kiemtra.py để thực hiện nhận diện và điểm danh với khuôn mặt có trong camera và thông tin từ database được nhập từ file input với model .xml vừa xuất được.
