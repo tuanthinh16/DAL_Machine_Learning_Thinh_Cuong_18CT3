@@ -1,8 +1,6 @@
 import cv2
 import sqlite3
 import datetime
-import easygui
-import argparse
 
 now = datetime.datetime.now()
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -24,7 +22,7 @@ fontFace = cv2.FONT_ITALIC
 while True:
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(
+    faces = face_cascade.detectMultiScale( # detect khuôn mặt
         gray,
         scaleFactor = 2,
         minNeighbors=5,
@@ -32,11 +30,11 @@ while True:
         minSize = (50, 50)
     )
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 3)
-        roi_color = frame[y:y+h, x:x+w]
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_gray = cv2.resize(roi_gray,(256,256))
-        MSSV, confidence = recognizer.predict(roi_gray)
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 3) 
+        roi_color = frame[y:y+h, x:x+w] # xắt ảnh theo khung khuôn mặt vừa vẽ
+        roi_gray = gray[y:y+h, x:x+w] # chuyeenr thành màu xám
+        roi_gray = cv2.resize(roi_gray,(256,256)) #thay đổi kích thước cùng với tệp dataset
+        MSSV, confidence = recognizer.predict(roi_gray) #tiến hành nhận dạng bằng model vừa train được trả về ID và độ tin cậy
         check = False
         
         if True:
@@ -52,7 +50,7 @@ while True:
                 curr = conn.execute(query)
                 isRecordExit = 0
                 for row in curr:
-                    if row[3] == now.day:
+                    if row[3] == now.day: #nếu trong database chưa ghi nhận điểm danh trong ngày hôm nay của SV đó thì tiến hành điểm danh nếu nhận đc khuôn mawtjphuf hợp
                         isRecordExit = 1
                 if(isRecordExit == 0):
                     query = "INSERT INTO diemdanh VALUES("+str(MSSV) + \
@@ -61,7 +59,8 @@ while True:
                     cv2.putText(frame, "Done !", (x, y+h-60),
                             fontFace, 1, (241, 175, 0), 3)
                 else:
-                    if now.hour > 6:
+                    if now.hour > 6: # nếu giờ điểm danh lớn hơn 6 thì là đi muộn
+                        check = False
                         cv2.putText(frame, "Too Late", (x, y+h+60),
                             fontFace, 1, (72, 150, 32), 2)
                     else:
@@ -72,7 +71,7 @@ while True:
                 conn.commit()
                 conn.close()
             else:
-                print(confidence," phan tram cung co the la",MSSV)
+                print(confidence," phan tram cung co the la",MSSV) # nếu độ chính xác chưa đủ thì có thể gần đúng với ID nào
                 cv2.putText(frame, "Unknow", (x+10, y+h+30),
                         fontFace, 1, (0, 0, 255), 2)
     frame = cv2.resize(frame, (900, 680))
